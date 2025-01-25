@@ -21,6 +21,7 @@ jobs:
               ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
               "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} \
               && git pull origin main \
+              && systemctl reload nginx \
               && exit"
                 
         - name: cleanup
