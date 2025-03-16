@@ -2,8 +2,10 @@ server {
     server_name amazonpaypal.cards www.amazonpaypal.cards;
 
     location / {
-        root /usr/share/nginx/html;
-        index amazonpaypal.cards.html;
+        #root /usr/share/nginx/html;
+        root /var/www/noxoroxo.com;
+        #index amazonpaypal.cards.html;
+        index noxoroxo.com.html
     }
 
     location /boilerplate/ {  # Change this if you'd like to server your Gradio app on a different path
