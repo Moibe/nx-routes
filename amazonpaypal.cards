@@ -1,5 +1,5 @@
 server {
-    server_name amazonpaypal.cards www.amazonpaypal.cards;
+    server_name app.amazonpaypal.cards amazonpaypal.cards www.amazonpaypal.cards;
 
     location / {
         root /var/www/amazonpaypal.cards;
