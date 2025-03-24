@@ -116,13 +116,16 @@ server {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
-
     if ($host = amazonpaypal.cards) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
+    if ($host = app.amazonpaypal.cards) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
     listen 80;
-    server_name amazonpaypal.cards www.amazonpaypal.cards;
+    server_name app.amazonpaypal.cards amazonpaypal.cards www.amazonpaypal.cards;
     return 404; # managed by Certbot
 
 }
