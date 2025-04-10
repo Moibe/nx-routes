@@ -1,1 +1,1 @@
-/etc/nginx/sites-available
+path: /etc/nginx/sites-available
