@@ -3,8 +3,7 @@ path: /etc/nginx/sites-available
 template:
 
 server {
-    listen 80;
-    server_name powerlineup.io www.powerlineup.io;
+    server_name splashmix.ink www.splashmix.io;
 
     location / {
 	root /usr/share/nginx/html;
