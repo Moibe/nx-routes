@@ -2,8 +2,8 @@ server {
     server_name splashmix.ink www.splashmix.ink api.splashmix.ink app.splashmix.ink buy.splashmix.ink;
 
     location / {
-	root /usr/share/nginx/html;
-	index dualvibe.com.html;
+	root /var/www/splashmix.ink;
+        index index.html;
     }
 
 
