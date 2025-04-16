@@ -1,5 +1,5 @@
 server {
-    server_name splashmix.ink www.splashmix.ink api.splashmix.ink app.splashmix.ink buy.splashmix.ink;
+    server_name splashmix.ink www.splashmix.ink api.splashmix.ink buy.splashmix.ink;
 
     location / {
 	root /var/www/splashmix.ink;
@@ -13,14 +13,22 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 
+}
 
+server {
+    server_name app.splashmix.ink;
 
-
-
-
-
-
-
+    location / {
+        proxy_pass http://127.0.0.1:7800/;
+        proxy_buffering off;
+        proxy_redirect off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
 }
 
 server {
@@ -52,14 +60,5 @@ server {
     server_name splashmix.ink www.splashmix.ink api.splashmix.ink app.splashmix.ink buy.splashmix.ink;
     listen 80;
     return 404; # managed by Certbot
-
-
-
-
-
-
-
-
-
 
 }
