@@ -57,7 +57,7 @@ server {
     } # managed by Certbot
 
 
-    server_name splashmix.ink www.splashmix.ink api.splashmix.ink app.splashmix.ink buy.splashmix.ink;
+    server_name splashmix.ink www.splashmix.ink api.splashmix.ink buy.splashmix.ink;
     listen 80;
     return 404; # managed by Certbot
 
