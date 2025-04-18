@@ -7,7 +7,7 @@ server {
   #  }
 
     location / {
-	  root code/splashmix-login;
+	  root /code/splashmix-login;
         index login.html;
     }
     
