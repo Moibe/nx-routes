@@ -1,7 +1,7 @@
 server {
     server_name app.splashmix.ink;
 
-    location /login/ {
+    location /login123/ {
 	root /var/www/splashmix-login;
         index login.html;
     }
