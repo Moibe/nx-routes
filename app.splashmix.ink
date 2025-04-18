@@ -1,10 +1,15 @@
 server {
     server_name app.splashmix.ink;
 
-    location / {
-	  root code/splashmix-login;
-        index login.html;
+ location / {
+	root /var/www/splashmix.ink;
+        index index.html;
     }
+
+    #location / {
+	#  root code/splashmix-login;
+        #index login.html;
+    #}
     
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
