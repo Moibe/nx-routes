@@ -1,13 +1,8 @@
 server {
     server_name app.splashmix.ink;
 
-    location / {
-	root /var/www/splashmix-login;
-        index login.html;
-    }
-
-    location /aplicacion/ {  # Change this if you'd like to server your Gradio app on a different path
-        proxy_pass http://127.0.0.1:7800/; # Change this if your Gradio app will be running on a different port
+    location / {  
+        proxy_pass http://127.0.0.1:7800/; 
         proxy_buffering off;
         proxy_redirect off;
         proxy_http_version 1.1;
@@ -17,6 +12,11 @@ server {
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
+
+    location /login {
+	root /var/www/splashmix-login;
+        index login.html;
+    }    
     
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
