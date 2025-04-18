@@ -2,7 +2,7 @@ server {
     server_name app.splashmix.ink;
 
     location / {
-	  root /code/splashmix-login;
+	  root code/splashmix-login;
         index login.html;
     }
     
