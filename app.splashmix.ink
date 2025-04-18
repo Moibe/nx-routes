@@ -13,8 +13,8 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /login {
-	root /var/www/splashmix-login;
+    location = /login {
+        root /var/www/splashmix-login;
         index login.html;
     }    
     
