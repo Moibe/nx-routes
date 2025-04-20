@@ -17,6 +17,14 @@ server {
     root /var/www/splashmix-login;
     try_files /login.html =404;
 }  
+
+location /index.css {
+    root /var/www/splashmix-login;
+}
+
+location /auth.js {
+    root /var/www/splashmix-login;
+}
     
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
