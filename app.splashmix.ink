@@ -18,7 +18,7 @@ server {
     try_files /login.html =404;
 }
 
-location ~ ^/(\.css$|\.js$|\.(png|jpg|jpeg|gif|svg|ico))$ {
+location ~ ^/(.css$|.js$|.(png|jpg|jpeg|gif|svg|ico))$ {
     root /var/www/splashmix-login;
 }
     
