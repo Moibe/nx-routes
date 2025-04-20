@@ -18,7 +18,15 @@ server {
     try_files /login.html =404;
 }
 
-location ~ ^/(.css$|.js$|.(png|jpg|jpeg|gif|svg|ico))$ {
+location = /index.css {
+    root /var/www/splashmix-login;
+}
+
+location = /auth.js {
+    root /var/www/splashmix-login;
+}
+
+location = /config.js {
     root /var/www/splashmix-login;
 }
     
