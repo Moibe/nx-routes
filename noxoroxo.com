@@ -42,7 +42,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /super/ {  # Change this if you'd like to server your Gradio app on a different path
+    location /super/ {  # Free ver for Chrs 
         proxy_pass http://127.0.0.1:7889/; # Change this if your Gradio app will be running on a different port
         proxy_buffering off;
         proxy_redirect off;
