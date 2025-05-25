@@ -1,3 +1,5 @@
+A que apps apunta cada dominio existente.
+
 path: /etc/nginx/sites-available
 
 template:
