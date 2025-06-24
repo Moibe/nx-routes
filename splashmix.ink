@@ -1,5 +1,5 @@
 server {
-    server_name splashmix.ink www.splashmix.ink api.splashmix.ink buy.splashmix.ink;
+    server_name splashmix.ink www.splashmix.ink api.splashmix.ink;
 
     location / {
 	root /var/www/splashmix.ink;
