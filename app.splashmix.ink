@@ -50,6 +50,10 @@ location = /api.js {
 location = /precios.js {
     root /var/www/splashmix-buy;
 }
+
+location = /auth_buy.js {
+    root /var/www/splashmix-buy;
+}
     
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
