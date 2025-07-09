@@ -34,6 +34,22 @@ location = /auth.js {
 location = /config.js {
     root /var/www/splashmix-login;
 }
+
+location = /tabulator.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /index.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /api.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /precios.js {
+    root /var/www/splashmix-buy;
+}
     
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
