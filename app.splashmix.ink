@@ -13,6 +13,11 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+   location = /buy {
+    root /var/www/splashmix-buy;
+    try_files /buy.html =404;
+}
+
    location = /login {
     root /var/www/splashmix-login;
     try_files /login.html =404;
