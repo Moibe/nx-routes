@@ -15,7 +15,7 @@ server {
 
    location = /buy {
     root /var/www/splashmix-buy;
-    try_files /buy.html =404;
+    try_files /index.html =404;
 }
 
    location = /login {
