@@ -59,8 +59,9 @@ location = /style.css {
     root /var/www/splashmix-buy;
 }
 
-location = /imagenes/ {
+location /imagenes/ {
     root /var/www/splashmix-buy;
+    try_files $uri $uri/ =404;
 }
     
     listen 443 ssl; # managed by Certbot
