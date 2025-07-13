@@ -59,7 +59,7 @@ location = /style.css {
     root /var/www/splashmix-buy;
 }
 
-location = /images {
+location = /imagenes {
     root /var/www/splashmix-buy;
 }
     
