@@ -1,6 +1,9 @@
 server {
 	server_name splashmix.ink www.splashmix.ink api.splashmix.ink;
 
+    error_page 404 /404.html;
+
+
     location / {
 	root /var/www/splashmix.ink;
 	index index.html;
