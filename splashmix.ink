@@ -1,8 +1,10 @@
 server {
 	server_name splashmix.ink www.splashmix.ink api.splashmix.ink;
 
-    error_page 404 /404.html;
-
+    location = /404.html {
+        root /var/www/splashmix.ink; # Asegúrate de que 404.html esté aquí
+        internal; # Esto evita que los usuarios accedan a /404.html directamente
+    }
 
     location / {
 	root /var/www/splashmix.ink;
