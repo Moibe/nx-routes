@@ -23,6 +23,13 @@ server {
     try_files /login.html =404;
 }
 
+location = /logout {
+        # Internamente reescribe la URI a /login y añade el parámetro ?logout=true
+        # La directiva 'last' hace que Nginx reinicie el procesamiento de la petición
+        # con la nueva URI reescrita, que ahora coincidirá con 'location = /login'.
+        rewrite ^ /login?logout=true last;
+    }
+
 location = /index.css {
     root /var/www/splashmix-login;
 }
