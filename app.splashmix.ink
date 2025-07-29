@@ -13,6 +13,13 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+error_page 404 /404.html;
+
+location = /404.html {
+    root /var/www/splashmix.ink; # O donde sea que esté tu 404.html
+    internal; # Esto es clave: evita el acceso directo
+}
+
    location = /buy {
     root /var/www/splashmix-buy;
     try_files /index.html =404;
