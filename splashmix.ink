@@ -10,6 +10,10 @@ server {
 	return 301 https://app.splashmix.ink/login$is_args$args;
     }
 
+    location = /buy {
+	return 301 https://app.splashmix.ink/buy$is_args$args;
+    }
+
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/splashmix.ink/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/splashmix.ink/privkey.pem; # managed by Certbot
