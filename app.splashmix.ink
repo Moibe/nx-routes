@@ -24,10 +24,9 @@ server {
 }
 
 location = /logout {
-        # Internamente reescribe la URI a /login y añade el parámetro ?logout=true
-        # La directiva 'last' hace que Nginx reinicie el procesamiento de la petición
-        # con la nueva URI reescrita, que ahora coincidirá con 'location = /login'.
-        rewrite ^ /login?logout=true last;
+        # Realiza una redirección EXTERNA (302 Found) al navegador
+        # El navegador entonces solicita /login?logout=true
+        return 302 /login?logout=true;
     }
 
 location = /index.css {
