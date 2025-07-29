@@ -7,7 +7,6 @@ template:
 
 server {
     server_name splashmix.ink app.splashmix.ink;
-
     location / {
 	root /usr/share/nginx/html;
 	index dualvibe.com.html;
