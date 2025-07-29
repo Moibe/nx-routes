@@ -16,7 +16,7 @@ server {
 error_page 404 /404.html;
 
 location = /404.html {
-    root /var/www/splashmix.ink; # O donde sea que esté tu 404.html
+    root /var/www/splashmix-login; # O donde sea que esté tu 404.html
     internal; # Esto es clave: evita el acceso directo
 }
 
