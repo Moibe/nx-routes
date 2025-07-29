@@ -6,7 +6,7 @@ path: /etc/nginx/sites-available
 template:
 
 server {
-    server_name splashmix.ink www.splashmix.ink;
+    server_name splashmix.ink app.splashmix.ink;
 
     location / {
 	root /usr/share/nginx/html;
