@@ -11,6 +11,7 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_intercept_errors on;
     }
 
 error_page 404 /404.html;
