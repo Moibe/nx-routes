@@ -45,6 +45,10 @@ location = /auth.js {
     root /var/www/splashmix-login;
 }
 
+location = /loader.js {
+    root /var/www/splashmix-login;
+}
+
 location = /config.js {
     root /var/www/splashmix-login;
 }
