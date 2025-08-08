@@ -49,6 +49,14 @@ location = /config.js {
     root /var/www/splashmix-login;
 }
 
+location = /config_dev.js {
+    root /var/www/splashmix-login;
+}
+
+location = /config_prod.js {
+    root /var/www/splashmix-login;
+}
+
 location = /tabulator.js {
     root /var/www/splashmix-buy;
 }
