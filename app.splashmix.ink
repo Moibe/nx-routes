@@ -65,6 +65,10 @@ location = /precios.js {
     root /var/www/splashmix-buy;
 }
 
+location = /tablas_precio.js {
+    root /var/www/splashmix-buy;
+}
+
 location = /auth_buy.js {
     root /var/www/splashmix-buy;
 }
