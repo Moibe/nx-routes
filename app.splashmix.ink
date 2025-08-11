@@ -41,6 +41,10 @@ location = /index.css {
     root /var/www/splashmix-login;
 }
 
+location = /environment.js {
+    root /var/www/splashmix-login;
+}
+
 location = /auth.js {
     root /var/www/splashmix-login;
 }
