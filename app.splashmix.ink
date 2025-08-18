@@ -49,8 +49,12 @@ location = /auth_login.js {
     root /var/www/splashmix-login;
 }
 
-location = /loader.js {
+location = /loader_login.js {
     root /var/www/splashmix-login;
+}
+
+location = /loader_buy.js {
+    root /var/www/splashmix-buy;
 }
 
 location = /config_dev.js {
