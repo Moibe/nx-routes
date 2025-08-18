@@ -93,6 +93,11 @@ location = /config.js {
     root /var/www/splashmix-buy;
 }
 
+location = /faqs.html {
+    root /var/www/splashmix-buy;
+}
+
+
 location /imagenes/ {
     root /var/www/splashmix-buy;
     try_files $uri $uri/ =404;
