@@ -97,6 +97,13 @@ location = /faqs.html {
     root /var/www/splashmix-buy;
 }
 
+location = /policy.html {
+    root /var/www/splashmix-buy;
+}
+
+location = /contacto.html {
+    root /var/www/splashmix-buy;
+}
 
 location /imagenes/ {
     root /var/www/splashmix-buy;
