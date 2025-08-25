@@ -1,134 +1,52 @@
 server {
-    server_name app.targetvox.com;
+	server_name targetvox.com www.targetvox.com api.targetvox.com;
 
-    location / {  
-        proxy_pass http://127.0.0.1:7800/; 
-        proxy_buffering off;
-        proxy_redirect off;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_intercept_errors on;
-    }
-
-error_page 404 /404.html;
+    error_page 404 /404.html;
 
 location = /404.html {
-    root /var/www/splashmix-login; # O donde sea que esté tu 404.html
+    root /var/www/targetvox.com; # O donde sea que esté tu 404.html
     internal; # Esto es clave: evita el acceso directo
 }
 
-   location = /buy {
-    root /var/www/splashmix-buy;
-    try_files /index.html =404;
-}
-
-   location = /login {
-    root /var/www/splashmix-login;
-    try_files /login.html =404;
-}
-
-location = /logout {
-        # Realiza una redirección EXTERNA (302 Found) al navegador
-        # El navegador entonces solicita /login?logout=true
-        return 302 /login?logout=true;
+    location / {
+	root /var/www/splashmix.ink;
+	index index.html;
+    }
+  
+    location = /login {
+	return 301 https://app.targetvox.com/login$is_args$args;
     }
 
-location = /index.css {
-    root /var/www/splashmix-login;
-}
+    location = /buy {
+	return 301 https://app.targetvox.com/buy$is_args$args;
+    }
 
-location = /environment.js {
-    root /var/www/splashmix-login;
-}
-
-location = /auth_login.js {
-    root /var/www/splashmix-login;
-}
-
-location = /loader_login.js {
-    root /var/www/splashmix-login;
-}
-
-location = /loader_buy.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /config_dev.js {
-    root /var/www/splashmix-login;
-}
-
-location = /config_prod.js {
-    root /var/www/splashmix-login;
-}
-
-location = /tabulator.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /index.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /api.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /precios.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /tablas_precio.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /auth_buy.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /style.css {
-    root /var/www/splashmix-buy;
-}
-
-location = /config.js {
-    root /var/www/splashmix-buy;
-}
-
-location = /faqs.html {
-    root /var/www/splashmix-buy;
-}
-
-location = /policy.html {
-    root /var/www/splashmix-buy;
-}
-
-location = /contacto.html {
-    root /var/www/splashmix-buy;
-}
-
-location /imagenes/ {
-    root /var/www/splashmix-buy;
-    try_files $uri $uri/ =404;
-}
-    
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/targetvox.com/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/targetvox.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-    client_max_body_size 10M;
+
 }
 
 server {   
 
-    if ($host = app.targetvox.com) {
+    if ($host = api.targetvox.com) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
-    
-    server_name app.targetvox.com;
+
+
+    if ($host = www.targetvox.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = targetvox.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name targetvox.com www.targetvox.com api.targetvox.com;
     listen 80;
     return 404; # managed by Certbot
 
