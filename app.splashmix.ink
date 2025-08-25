@@ -65,6 +65,10 @@ location = /config_prod.js {
     root /var/www/splashmix-login;
 }
 
+location = /link.js {
+    root /var/www/splashmix-login;
+}
+
 location = /tabulator.js {
     root /var/www/splashmix-buy;
 }
@@ -106,6 +110,10 @@ location = /policy.html {
 }
 
 location = /contacto.html {
+    root /var/www/splashmix-buy;
+}
+
+location = /link_manager.js {
     root /var/www/splashmix-buy;
 }
 
