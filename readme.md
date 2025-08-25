@@ -14,6 +14,6 @@ server {
 }
 
 y no olvidar agregar el enlace simbólico: 
-Estándo en sites-enabled:
+Estando en sites-enabled:
 ln -s /etc/nginx/sites-available/otrodominio.com otrodominio.com
 Una vez agregado debes hacer reload así: systemctl reload nginx
