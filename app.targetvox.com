@@ -22,7 +22,7 @@ location = /404.html {
 }
 
    location = /buy {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
     try_files /index.html =404;
 }
 
@@ -70,55 +70,55 @@ location = /link.js {
 }
 
 location = /tabulator.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /index.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /api.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /precios.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /tablas_precio.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /auth_buy.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /style.css {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /config.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /link_manager.js {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /faqs.html {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /policy.html {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location = /contacto.html {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
 }
 
 location /imagenes/ {
-    root /var/www/splashmix-buy;
+    root /var/www/splashmix-buy-dev;
     try_files $uri $uri/ =404;
 }
     
