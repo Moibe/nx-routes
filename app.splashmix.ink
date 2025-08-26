@@ -2,7 +2,7 @@ server {
     server_name app.splashmix.ink;
 
     location / {  
-        proxy_pass http://127.0.0.1:7800/; 
+        proxy_pass http://127.0.0.1:7878/; 
         proxy_buffering off;
         proxy_redirect off;
         proxy_http_version 1.1;
