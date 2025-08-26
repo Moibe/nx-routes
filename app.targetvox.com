@@ -17,7 +17,7 @@ server {
 error_page 404 /404.html;
 
 location = /404.html {
-    root /var/www/splashmix-login; # O donde sea que esté tu 404.html
+    root /var/www/splashmix-login-dev; # O donde sea que esté tu 404.html
     internal; # Esto es clave: evita el acceso directo
 }
 
@@ -27,7 +27,7 @@ location = /404.html {
 }
 
    location = /login {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
     try_files /login.html =404;
 }
 
@@ -38,19 +38,19 @@ location = /logout {
     }
 
 location = /index.css {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /environment.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /auth_login.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /loader_login.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /loader_buy.js {
@@ -58,15 +58,15 @@ location = /loader_buy.js {
 }
 
 location = /config_dev.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /config_prod.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /link.js {
-    root /var/www/splashmix-login;
+    root /var/www/splashmix-login-dev;
 }
 
 location = /tabulator.js {
