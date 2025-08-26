@@ -9,7 +9,7 @@ location = /404.html {
 }
 
     location / {
-	root /var/www/splashmix.ink;
+	root /var/www/targetvox.com;
 	index index.html;
     }
   
