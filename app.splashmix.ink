@@ -117,6 +117,10 @@ location = /link_manager.js {
     root /var/www/splashmix-buy;
 }
 
+location = /gtm-loader.js {
+    root /var/www/splashmix-buy;
+}
+
 location /imagenes/ {
     root /var/www/splashmix-buy;
     try_files $uri $uri/ =404;
