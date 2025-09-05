@@ -101,10 +101,6 @@ location = /config.js {
     root /var/www/splashmix-buy-dev;
 }
 
-location = /link_manager.js {
-    root /var/www/splashmix-buy-dev;
-}
-
 location = /faqs.html {
     root /var/www/splashmix-buy-dev;
 }
@@ -114,6 +110,14 @@ location = /policy.html {
 }
 
 location = /contacto.html {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /link_manager.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /gtm-loader.js {
     root /var/www/splashmix-buy-dev;
 }
 
