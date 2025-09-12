@@ -81,6 +81,10 @@ location = /api.js {
     root /var/www/splashmix-buy-dev;
 }
 
+location = /ambiente.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /precios.js {
     root /var/www/splashmix-buy-dev;
 }
