@@ -69,11 +69,15 @@ location = /link.js {
     root /var/www/splashmix-login;
 }
 
-location = /tabulator.js {
+location = /ambiente.js {
     root /var/www/splashmix-buy;
 }
 
-location = /index.js {
+location = /tabulador.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /cards.js {
     root /var/www/splashmix-buy;
 }
 
