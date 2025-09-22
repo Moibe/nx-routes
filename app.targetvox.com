@@ -62,7 +62,7 @@ location = /main.js {
     root /var/www/splashmix-buy-dev;
 }
 
-location = /styles.js {
+location = /styles.css {
     root /var/www/splashmix-buy-dev;
 }
 
