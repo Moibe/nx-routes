@@ -82,6 +82,14 @@ location = /config_prod.js {
     root /var/www/splashmix-login-dev;
 }
 
+location = /buy_config_dev.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /buy_config_prod.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /link.js {
     root /var/www/splashmix-login-dev;
 }
