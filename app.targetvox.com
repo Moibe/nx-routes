@@ -28,7 +28,7 @@ location = /404.html {
 
  location = /test {
     root /var/www/splashmix-buy-dev;
-    try_files /tableglass.html =404;
+    try_files /tablaglass.html =404;
 }
 
    location = /login {
