@@ -21,7 +21,7 @@ location = /404.html {
     internal; # Esto es clave: evita el acceso directo
 }
 
-   location = /buy {
+location = /buy {
     root /var/www/splashmix-buy;
     try_files /index.html =404;
 }
@@ -36,6 +36,10 @@ location = /logout {
         # El navegador entonces solicita /login?logout=true
         return 302 /login?logout=true;
     }
+
+location = /main.js {
+    root /var/www/splashmix-buy-dev;
+}
 
 location = /index.css {
     root /var/www/splashmix-login;
