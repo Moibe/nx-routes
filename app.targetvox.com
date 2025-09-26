@@ -54,6 +54,10 @@ location = /auth_login.js {
     root /var/www/splashmix-login-dev;
 }
 
+location = /table_generator.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /tablaglass.html {
     root /var/www/splashmix-buy-dev;
 }
