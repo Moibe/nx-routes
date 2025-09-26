@@ -41,6 +41,10 @@ location = /main.js {
     root /var/www/splashmix-buy-dev;
 }
 
+location = /table_generator.js {
+    root /var/www/splashmix-buy;
+}
+
 location = /index.css {
     root /var/www/splashmix-login;
 }
