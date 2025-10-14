@@ -13,7 +13,7 @@ location = /404.html {
 	index index.html;
     }
 
-	location /reddit {
+	location = /reddit {
 	root /var/www/splashmix.ink;
 	index reddit.html;
     }
