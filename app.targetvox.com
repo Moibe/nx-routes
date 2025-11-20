@@ -58,6 +58,14 @@ location = /table_generator.js {
     root /var/www/splashmix-buy-dev;
 }
 
+location = /firestore_db.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /visit_tracker.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /tablaglass.html {
     root /var/www/splashmix-buy-dev;
 }
