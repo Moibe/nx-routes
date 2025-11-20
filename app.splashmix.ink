@@ -45,6 +45,14 @@ location = /table_generator.js {
     root /var/www/splashmix-buy;
 }
 
+location = /firestore_db.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /visit_tracker.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /index.css {
     root /var/www/splashmix-login;
 }
