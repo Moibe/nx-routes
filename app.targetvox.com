@@ -66,6 +66,10 @@ location = /visit_tracker.js {
     root /var/www/splashmix-buy-dev;
 }
 
+location = /country_selector.js {
+    root /var/www/splashmix-buy-dev;
+}
+
 location = /tablaglass.html {
     root /var/www/splashmix-buy-dev;
 }
