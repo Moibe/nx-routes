@@ -10,12 +10,15 @@ location = /404.html {
 
     location / {
 	root /var/www/splashmix.ink;
+	try_files $uri $uri/ @print;
+	index index.html;
+    }
+
+    location @print {
 	if ($host = print.splashmix.ink) {
-	    try_files $uri $uri/ /print.html;
+	    rewrite ^.*$ /print.html last;
 	}
-	if ($host != print.splashmix.ink) {
-	    index index.html;
-	}
+	return 404;
     }
 
 	location = /reddit {
