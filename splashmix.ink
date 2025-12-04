@@ -11,8 +11,9 @@ location = /404.html {
     location / {
 	root /var/www/splashmix.ink;
 	if ($host = print.splashmix.ink) {
-	    rewrite ^/$ /print.html break;
+	    rewrite ^.*$ /print.html break;
 	}
+	try_files $uri $uri/ =404;
 	index index.html;
     }
 
