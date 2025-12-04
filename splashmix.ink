@@ -11,10 +11,11 @@ location = /404.html {
     location / {
 	root /var/www/splashmix.ink;
 	if ($host = print.splashmix.ink) {
-	    rewrite ^.*$ /print.html break;
+	    try_files $uri $uri/ /print.html;
 	}
-	try_files $uri $uri/ =404;
-	index index.html;
+	if ($host != print.splashmix.ink) {
+	    index index.html;
+	}
     }
 
 	location = /reddit {
