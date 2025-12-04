@@ -58,8 +58,11 @@ server {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
+    if ($host = print.splashmix.ink) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
 
-    server_name splashmix.ink www.splashmix.ink api.splashmix.ink;
+    server_name splashmix.ink www.splashmix.ink api.splashmix.ink print.splashmix.ink;
     listen 80;
     return 404; # managed by Certbot
 
