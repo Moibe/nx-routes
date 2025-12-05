@@ -8,6 +8,10 @@ location = /404.html {
     internal; # Esto es clave: evita el acceso directo
 }
 
+    location /images/ {
+        root /var/www/splashmix.ink;
+    }
+
     location / {
 	root /var/www/splashmix.ink;
 	
