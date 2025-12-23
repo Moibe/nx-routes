@@ -1,6 +1,6 @@
 server {
     server_name imagen.splashmix.ink;
-    root code/splashmix_dash/dist;
+    root /root/code/splashmix_dash/dist;
 
     # Cache para archivos estáticos (JS/CSS con hash en nombre)
     location ~* ^/(_app/|assets/).*\.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
