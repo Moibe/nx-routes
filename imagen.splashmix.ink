@@ -19,7 +19,7 @@ server {
         add_header Cache-Control "public, must-revalidate";
     }
 
-    listen 443 ssl; # managed by Certbot
+    listen 443 ssl default_server; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/imagen.splashmix.ink/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/imagen.splashmix.ink/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
