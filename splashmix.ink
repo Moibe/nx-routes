@@ -34,6 +34,11 @@ location = /404.html {
 	root /var/www/splashmix.ink;
 	index reddit.html;
     }
+
+	location = /nu_index {
+	root /var/www/splashmix.ink;
+	index nu_index.html;
+    }
   
     location = /login {
 	return 301 https://app.splashmix.ink/login$is_args$args;
