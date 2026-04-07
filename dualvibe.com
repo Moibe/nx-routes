@@ -1,10 +1,47 @@
 server {
     server_name dualvibe.com www.dualvibe.com;
+    root /root/code/dualvibe/dist;
 
-    location / {
-	root /usr/share/nginx/html;
-	index dualvibe.com.html;
+    # Cache para archivos estáticos (JS/CSS con hash en nombre)
+    location ~* ^/(_app/|assets/).*\.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
     }
+
+    # index.html y archivos estáticos
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Política de cache para index.html (no cachear)
+    location = /index.html {
+        expires -1;
+        add_header Cache-Control "public, must-revalidate";
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/dualvibe.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/dualvibe.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 10M;
+}
+
+server {
+    if ($host = www.dualvibe.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = dualvibe.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+    server_name dualvibe.com www.dualvibe.com;
+    return 404; # managed by Certbot
+
+}
 
     location /astroblend/ {  # Change this if you'd like to server your Gradio app on a different path
         proxy_pass http://127.0.0.1:7877/; # Change this if your Gradio app will be running on a different port
