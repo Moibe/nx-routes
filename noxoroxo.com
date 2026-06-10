@@ -12,6 +12,11 @@ server {
         try_files /noxoroxo.com.html =404;
     }
 
+    # El login admin solo vive en administracion.noxoroxo.com — en el apex no existe.
+    location = /acceso {
+        return 404;
+    }
+
     location /detecta-integra/ {  # Change this if you'd like to server your Gradio app on a different path
         proxy_pass http://127.0.0.1:7877/; # Change this if your Gradio app will be running on a different port
         proxy_buffering off;
@@ -155,20 +160,32 @@ server {
     return 404; # managed by Certbot
 }
 
-# --- administracion.noxoroxo.com: acceso de admin ---
-# Bloque HTTP temporal para que Certbot valide. Tras emitir el cert, se convierte
-# a HTTPS (proxy a la app :3000, raíz redirige al login).
+# --- administracion.noxoroxo.com: acceso de admin (HTTPS) ---
 server {
-    listen 80;
     server_name administracion.noxoroxo.com;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
     }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/administracion.noxoroxo.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/administracion.noxoroxo.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 12M;
+}
+
+server {
+    listen 80;
+    server_name administracion.noxoroxo.com;
+    return 301 https://$host$request_uri;
 }
