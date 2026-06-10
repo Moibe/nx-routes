@@ -1,9 +1,15 @@
 server {
     server_name noxoroxo.com www.noxoroxo.com;
 
-    location / {
-	root /usr/share/nginx/html;
-	index noxoroxo.com.html;
+    # Forzar www -> apex (para que ORIGIN=https://noxoroxo.com siempre cuadre)
+    if ($host = www.noxoroxo.com) {
+        return 301 https://noxoroxo.com$request_uri;
+    }
+
+    # Portada estatica anterior (antes estaba en /)
+    location = /portada {
+        root /usr/share/nginx/html;
+        try_files /noxoroxo.com.html =404;
     }
 
     location /detecta-integra/ {  # Change this if you'd like to server your Gradio app on a different path
@@ -42,7 +48,7 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    location /super/ {  # Free ver for Chrs 
+    location /super/ {  # Free ver for Chrs
         proxy_pass http://127.0.0.1:7889/; # Change this if your Gradio app will be running on a different port
         proxy_buffering off;
         proxy_redirect off;
@@ -114,20 +120,29 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    # --- Quiniela del Mundial = cara principal ---
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     listen 443 ssl; # managed by Certbot
     ssl_certificate /etc/letsencrypt/live/noxoroxo.com/fullchain.pem; # managed by Certbot
     ssl_certificate_key /etc/letsencrypt/live/noxoroxo.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     client_max_body_size 12M;
-
-
-
 }
 
 server {
     if ($host = www.noxoroxo.com) {
-        return 301 https://$host$request_uri;
+        return 301 https://noxoroxo.com$request_uri;
     } # managed by Certbot
 
     if ($host = noxoroxo.com) {
@@ -137,5 +152,4 @@ server {
     listen 80;
     server_name noxoroxo.com www.noxoroxo.com;
     return 404; # managed by Certbot
-
 }
