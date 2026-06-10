@@ -130,6 +130,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
     }
 
     listen 443 ssl; # managed by Certbot
@@ -152,4 +153,22 @@ server {
     listen 80;
     server_name noxoroxo.com www.noxoroxo.com;
     return 404; # managed by Certbot
+}
+
+# --- administracion.noxoroxo.com: acceso de admin ---
+# Bloque HTTP temporal para que Certbot valide. Tras emitir el cert, se convierte
+# a HTTPS (proxy a la app :3000, raíz redirige al login).
+server {
+    listen 80;
+    server_name administracion.noxoroxo.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
 }
