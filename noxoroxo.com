@@ -164,6 +164,23 @@ server {
 server {
     server_name administracion.noxoroxo.com;
 
+    # Raíz del subdominio: sin sesión de admin → manda al login; con sesión → la app.
+    # (Chequeo de PRESENCIA del cookie; la validez la verifica la app.)
+    location = / {
+        if ($cookie_admin = "") {
+            return 302 /acceso;
+        }
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
