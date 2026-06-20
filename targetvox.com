@@ -1,24 +1,19 @@
 server {
-	server_name targetvox.com www.targetvox.com api.targetvox.com;
+    server_name targetvox.com www.targetvox.com api.targetvox.com;
 
-    error_page 404 /404.html;
+    # Forzar www -> apex para que ORIGIN=https://targetvox.com siempre cuadre
+    if ($host = www.targetvox.com) { return 301 https://targetvox.com$request_uri; }
 
-location = /404.html {
-    root /var/www/targetvox.com; # O donde sea que esté tu 404.html
-    internal; # Esto es clave: evita el acceso directo
-}
-
+    # commerce-crm (SvelteKit adapter-node) bajo pm2 en :3100
     location / {
-	root /var/www/targetvox.com;
-	index index.html;
-    }
-  
-    location = /login {
-	return 301 https://app.targetvox.com/login$is_args$args;
-    }
-
-    location = /buy {
-	return 301 https://app.targetvox.com/buy$is_args$args;
+        proxy_pass http://127.0.0.1:3100;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 
     listen 443 ssl; # managed by Certbot
@@ -26,28 +21,14 @@ location = /404.html {
     ssl_certificate_key /etc/letsencrypt/live/targetvox.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
+    client_max_body_size 12M;
 }
 
-server {   
-
-    if ($host = api.targetvox.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    if ($host = www.targetvox.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    if ($host = targetvox.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    server_name targetvox.com www.targetvox.com api.targetvox.com;
+server {
+    if ($host = www.targetvox.com) { return 301 https://targetvox.com$request_uri; } # managed by Certbot
+    if ($host = api.targetvox.com) { return 301 https://$host$request_uri; } # managed by Certbot
+    if ($host = targetvox.com)     { return 301 https://$host$request_uri; } # managed by Certbot
     listen 80;
+    server_name targetvox.com www.targetvox.com api.targetvox.com;
     return 404; # managed by Certbot
-
 }
