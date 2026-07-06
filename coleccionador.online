@@ -1,4 +1,4 @@
-# nx-routes: ruta de coleccionador.online → menu (catálogo de menús/productos, SvelteKit) en 127.0.0.1:3200 (pm2).
+# nx-routes: ruta de coleccionador.online → menu (catálogo de menús/productos, SvelteKit) en 127.0.0.1:3400 (pm2).
 # El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: coleccionador.online
 #
 # Primer deploy del dominio (cert aún no existe):
@@ -16,7 +16,7 @@ server {
     if ($host = www.coleccionador.online) { return 301 https://coleccionador.online$request_uri; }
 
     location / {
-        proxy_pass http://127.0.0.1:3200;
+        proxy_pass http://127.0.0.1:3400;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
