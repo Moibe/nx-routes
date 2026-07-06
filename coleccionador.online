@@ -1,0 +1,44 @@
+# nx-routes: ruta de coleccionador.online → menu (catálogo de menús/productos, SvelteKit) en 127.0.0.1:3200 (pm2).
+# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: coleccionador.online
+#
+# Primer deploy del dominio (cert aún no existe):
+#   1) sudo certbot certonly --nginx -d coleccionador.online -d www.coleccionador.online
+#   2) symlink + reload:
+#        cd /etc/nginx/sites-enabled
+#        ln -s /etc/nginx/sites-available/coleccionador.online coleccionador.online
+#        nginx -t && systemctl reload nginx
+#
+# www → apex forzado: canónico es el apex, y así ORIGIN=https://coleccionador.online siempre cuadra.
+
+server {
+    server_name coleccionador.online www.coleccionador.online;
+
+    if ($host = www.coleccionador.online) { return 301 https://coleccionador.online$request_uri; }
+
+    location / {
+        proxy_pass http://127.0.0.1:3200;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/coleccionador.online/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/coleccionador.online/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 12M;
+}
+
+server {
+    if ($host = www.coleccionador.online) { return 301 https://coleccionador.online$request_uri; }
+    if ($host = coleccionador.online)     { return 301 https://$host$request_uri; }
+    listen 80;
+    server_name coleccionador.online www.coleccionador.online;
+    return 404;
+}
