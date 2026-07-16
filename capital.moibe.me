@@ -1,15 +1,14 @@
-# nx-routes: ruta de fortunecity.com → app SvelteKit en 127.0.0.1:5555 (pm2).
-# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: fortunecity.com
+# nx-routes: ruta de capital.moibe.me → app SvelteKit en 127.0.0.1:5555 (pm2).
+# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: capital.moibe.me
 #
 # Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet:
-#     sudo certbot --nginx -d fortunecity.com
+#     sudo certbot --nginx -d capital.moibe.me
 # Si nginx se queja de que el cert aún no existe (primer deploy del dominio):
-#   1) obtén el cert primero:  sudo certbot certonly --nginx -d fortunecity.com
-#   2) crea el symlink + reload (ver checklist de la skill).
-# (Para un dominio apex con www, agrega "www.fortunecity.com" a server_name + su redirect.)
+#   1) obtén el cert primero:  sudo certbot certonly --nginx -d capital.moibe.me
+#   2) crea el symlink + reload (ver checklist).
 
 server {
-    server_name fortunecity.com;
+    server_name capital.moibe.me;
 
     location / {
         proxy_pass http://127.0.0.1:5555;
@@ -24,16 +23,16 @@ server {
     }
 
     listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/fortunecity.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/fortunecity.com/privkey.pem; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/capital.moibe.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/capital.moibe.me/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     client_max_body_size 12M;
 }
 
 server {
-    if ($host = fortunecity.com) { return 301 https://$host$request_uri; } # managed by Certbot
+    if ($host = capital.moibe.me) { return 301 https://$host$request_uri; } # managed by Certbot
     listen 80;
-    server_name fortunecity.com;
+    server_name capital.moibe.me;
     return 404; # managed by Certbot
 }
