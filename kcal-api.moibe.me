@@ -1,0 +1,37 @@
+# nx-routes: ruta de kcal-api.moibe.me → FastAPI (nutricion_api) en 127.0.0.1:8002 (pm2).
+# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: kcal-api.moibe.me
+#
+# Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet:
+#     sudo certbot --nginx -d kcal-api.moibe.me
+# Si nginx se queja de que el cert aún no existe (primer deploy del dominio):
+#   1) obtén el cert primero:  sudo certbot certonly --nginx -d kcal-api.moibe.me
+#   2) crea el symlink + reload (ver checklist).
+
+server {
+    server_name kcal-api.moibe.me;
+
+    location / {
+        proxy_pass http://127.0.0.1:8002;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/kcal-api.moibe.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/kcal-api.moibe.me/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 12M;
+}
+
+server {
+    if ($host = kcal-api.moibe.me) { return 301 https://$host$request_uri; } # managed by Certbot
+    listen 80;
+    server_name kcal-api.moibe.me;
+    return 404; # managed by Certbot
+}
