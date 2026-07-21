@@ -1,10 +1,12 @@
 # nx-routes: ruta de shapeup.moibe.me → app SvelteKit en 127.0.0.1:3800 (pm2, shape_up_moibe).
 # El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: shapeup.moibe.me
 #
-# Pendiente hasta que el DNS de shapeup.moibe.me apunte a este droplet (165.22.53.200):
-#   sudo certbot --nginx -d shapeup.moibe.me
-# Certbot reescribe este archivo agregando el bloque SSL (443) + el redirect 80→443
-# automáticamente. Mientras tanto, sirve en plano por HTTP (puerto 80).
+# Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet.
+# OJO: en este droplet `certbot --nginx` para un dominio NUEVO no siempre encuentra
+# este archivo (si no hay symlink en sites-enabled todavía) y a veces le pega el
+# bloque SSL al server_name equivocado (le pasó con admin.moibe.me, capital.moibe.me
+# y aquí también) — por eso el bloque SSL de abajo se armó a mano contra el cert que
+# certbot sí emitió bien, en vez de dejar que --nginx lo "instale".
 
 server {
     server_name shapeup.moibe.me;
@@ -21,6 +23,17 @@ server {
         proxy_set_header X-Forwarded-Host $host;
     }
 
-    listen 80;
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/shapeup.moibe.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/shapeup.moibe.me/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     client_max_body_size 12M;
+}
+
+server {
+    if ($host = shapeup.moibe.me) { return 301 https://$host$request_uri; } # managed by Certbot
+    listen 80;
+    server_name shapeup.moibe.me;
+    return 404; # managed by Certbot
 }
