@@ -20,6 +20,13 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
+        # /api/* (proxy propio del front hacia nutricion_api) incluye /chat,
+        # que puede tardar varios segundos en OpenAI -- default de nginx
+        # (60s) es justo para eso. Ahora que el browser ya no le habla
+        # directo a kcal-api.moibe.me, este es el timeout que de verdad
+        # aplica a esas llamadas.
+        proxy_read_timeout 120s;
+        proxy_send_timeout 120s;
     }
 
     listen 443 ssl; # managed by Certbot
@@ -27,7 +34,10 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/kcal.moibe.me/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-    client_max_body_size 12M;
+    # 15M para que quepa una foto del chat en base64 (tope de la app:
+    # 12_000_000 caracteres de imagen + el resto del JSON) sin quedar justo
+    # contra el límite.
+    client_max_body_size 15M;
 }
 
 server {
