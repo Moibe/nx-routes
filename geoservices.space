@@ -1,6 +1,32 @@
+# nx-routes: geoservices.space -> svelte_geo (sitio estatico en /root/code/svelte_geo/dist)
+# mas /track/ -> geospace-track (FastAPI + SQLite, pm2, 127.0.0.1:8003).
+#
+# OJO: el bloque 443 de abajo es el UNICO `default_server` de todo nx-routes.
+# Si se pierde esa palabra al editar, cambia el comportamiento HTTPS del droplet
+# entero para cualquier host no reconocido, no solo el de este dominio.
+
 server {
     server_name geoservices.space www.geoservices.space;
     root /root/code/svelte_geo/dist;
+
+    # API de tracking (geospace-track).
+    #
+    # El navegador antes escribia a moibe-fastapi-mariadb-geospaces.hf.space:
+    # salto cross-origin + preflight CORS + un Space que duerme + otro salto a
+    # MariaDB en Opalstack. Con este bloque el tracking es mismo-origen y la
+    # escritura termina en un archivo del mismo disco.
+    #
+    # La diagonal final de proxy_pass NO es opcional: hace que
+    # /track/api/map-interactions llegue al backend como /api/map-interactions.
+    location /track/ {
+        proxy_pass http://127.0.0.1:8003/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
 
     # Cache para archivos estáticos (JS/CSS con hash en nombre)
     location ~* ^/(_app/|assets/).*\.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
