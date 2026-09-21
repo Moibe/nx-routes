@@ -1,22 +1,30 @@
-# nx-routes: geoservices.space -> svelte_geo (sitio estatico en /root/code/svelte_geo/dist)
-# mas /track/ -> geospace-track (FastAPI + SQLite, pm2, 127.0.0.1:8003).
+# nx-routes: geoservices.space -> svelte_geo (SvelteKit + adapter-node, pm2, 127.0.0.1:3900)
+#                                 /track/ -> geospace-track (FastAPI + SQLite, pm2, 127.0.0.1:8003)
 #
 # OJO: el bloque 443 de abajo es el UNICO `default_server` de todo nx-routes.
 # Si se pierde esa palabra al editar, cambia el comportamiento HTTPS del droplet
 # entero para cualquier host no reconocido, no solo el de este dominio.
+#
+# ROLLBACK: este dominio se servia como archivos estaticos desde
+# /root/code/svelte_geo/dist. La copia congelada de esa version vive en
+# /root/code/svelte_geo_dist_rollback. Para volver: `git revert` del commit que
+# introdujo el proxy_pass, apuntando el root a ese directorio.
 
 server {
     server_name geoservices.space www.geoservices.space;
-    root /root/code/svelte_geo/dist;
+
+    # www -> apex. NO es cosmetico: adapter-node compara el Origin de cada
+    # request contra la variable ORIGIN (https://geoservices.space). Todo lo que
+    # entre por www queda con el origen desalineado y eso rompe cookies secure
+    # y el CSRF de las form actions. Mismo patron que quiniela/DEPLOY.md.
+    if ($host = www.geoservices.space) {
+        return 301 https://geoservices.space$request_uri;
+    }
 
     # API de tracking (geospace-track).
     #
-    # El navegador antes escribia a moibe-fastapi-mariadb-geospaces.hf.space:
-    # salto cross-origin + preflight CORS + un Space que duerme + otro salto a
-    # MariaDB en Opalstack. Con este bloque el tracking es mismo-origen y la
-    # escritura termina en un archivo del mismo disco.
-    #
-    # La diagonal final de proxy_pass NO es opcional: hace que
+    # Va antes que `location /` por claridad; nginx elegiria igual el prefijo
+    # mas largo. La diagonal final de proxy_pass NO es opcional: hace que
     # /track/api/map-interactions llegue al backend como /api/map-interactions.
     location /track/ {
         proxy_pass http://127.0.0.1:8003/;
@@ -28,21 +36,22 @@ server {
         proxy_set_header X-Forwarded-Host $host;
     }
 
-    # Cache para archivos estáticos (JS/CSS con hash en nombre)
-    location ~* ^/(_app/|assets/).*\.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # index.html y archivos estáticos
+    # La app.
+    #
+    # Ya no hay `root` ni `try_files`: los sirve SvelteKit. Tampoco los bloques
+    # de cache que habia antes — adapter-node ya manda Cache-Control immutable
+    # para /_app/immutable/ y no-cache para el HTML. Dejarlos apuntando a un
+    # dist/ que nadie actualiza habria servido archivos viejos.
     location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Política de cache para index.html (no cachear)
-    location = /index.html {
-        expires -1;
-        add_header Cache-Control "public, must-revalidate";
+        proxy_pass http://127.0.0.1:3900;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
     }
 
     listen 443 ssl default_server; # managed by Certbot
