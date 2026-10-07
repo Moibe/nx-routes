@@ -1,0 +1,50 @@
+# nx-routes: ruta de transfiere.moibe.me → app SvelteKit en 127.0.0.1:4500 (pm2).
+# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: transfiere.moibe.me
+#
+# Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet:
+#     sudo certbot --nginx -d transfiere.moibe.me
+# Si nginx se queja de que el cert aún no existe (primer deploy del dominio):
+#   1) obtén el cert primero:  sudo certbot certonly --nginx -d transfiere.moibe.me
+#   2) crea el symlink + reload (ver checklist de la skill).
+#
+# Particularidades de esta app (archivos pesados):
+#   - Las subidas van en chunks de 16 MB (src/lib/upload.ts): client_max_body_size 64M deja margen.
+#   - proxy_request_buffering off: cada chunk pasa directo a Node en vez de bufferearse a disco.
+#   - proxy_buffering off: las descargas (hasta de varios GB) se streamean sin archivos temporales.
+#   - Timeouts de una hora para conexiones lentas en ambos sentidos.
+
+server {
+    server_name transfiere.moibe.me;
+
+    client_max_body_size 64M;
+    client_body_timeout 300s;
+    proxy_request_buffering off;
+    proxy_buffering off;
+    proxy_read_timeout 3600s;
+    proxy_send_timeout 3600s;
+
+    location / {
+        proxy_pass http://127.0.0.1:4500;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/transfiere.moibe.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/transfiere.moibe.me/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = transfiere.moibe.me) { return 301 https://$host$request_uri; } # managed by Certbot
+    listen 80;
+    server_name transfiere.moibe.me;
+    return 404; # managed by Certbot
+}
