@@ -1,4 +1,4 @@
-# nx-routes: ruta de transfiere.moibe.me → app SvelteKit en 127.0.0.1:4500 (pm2).
+# nx-routes: ruta de transfiere.moibe.me → app SvelteKit en 127.0.0.1:7711 (pm2).
 # El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: transfiere.moibe.me
 #
 # Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet:
@@ -24,7 +24,7 @@ server {
     proxy_send_timeout 3600s;
 
     location / {
-        proxy_pass http://127.0.0.1:4500;
+        proxy_pass http://127.0.0.1:7711;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
