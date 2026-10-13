@@ -2,6 +2,26 @@ server {
     server_name dashboard.geoservices.space;
     root /root/code/geospace_dashboard/dist;
 
+    # La API de nucleo se sirve desde ESTE MISMO origen.
+    #
+    # Antes el dashboard le hablaba a https://api.geoservices.space desde el
+    # navegador, o sea cross-origin: ahi un usuario y contrasena de HTTP Basic
+    # no sirven, porque los navegadores no mandan credenciales en peticiones
+    # cross-origin salvo que la API responda con CORS especifico. Con la API
+    # colgada de este vhost, un solo login protege el dashboard y los datos, y el
+    # navegador reenvia las credenciales solo en cada llamada.
+    location /api/ {
+        proxy_pass         http://127.0.0.1:8001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header   Host              $host;
+        proxy_set_header   X-Real-IP         $remote_addr;
+        proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+
+        proxy_read_timeout  120s;
+        proxy_send_timeout  120s;
+    }
+
     # Cache para archivos estáticos (JS/CSS con hash en nombre)
     location ~* ^/(_app/|assets/).*\.(js|css|png|jpg|jpeg|gif|svg|woff2?)$ {
         expires 1y;
