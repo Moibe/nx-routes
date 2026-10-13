@@ -14,6 +14,19 @@ server {
 server {
     server_name api.geoservices.space;
 
+    # ACCESO RESTRINGIDO.
+    #
+    # Esta API (geospace_nucleo) no tiene autenticacion propia, y POST /api/ask
+    # pasa preguntas libres a OpenAI con la llave del proyecto y ejecuta el SQL
+    # resultante contra la base. Hasta el 2026-10-13 estaba abierta a internet.
+    # Ahora todo el vhost pide usuario y contrasena (HTTP Basic sobre HTTPS).
+    #
+    # Las credenciales viven en /etc/nginx/geospace.htpasswd, FUERA del repo
+    # (hash SHA-512 crypt). Para cambiarlas:
+    #   printf 'moibe:%s\n' "$(openssl passwd -6 'NUEVA')" > /etc/nginx/geospace.htpasswd
+    auth_basic           "Geospace";
+    auth_basic_user_file /etc/nginx/geospace.htpasswd;
+
     location /api/ {
         proxy_pass         http://127.0.0.1:8001/api/;
         proxy_http_version 1.1;

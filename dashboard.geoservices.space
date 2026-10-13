@@ -2,6 +2,13 @@ server {
     server_name dashboard.geoservices.space;
     root /root/code/geospace_dashboard/dist;
 
+    # ACCESO RESTRINGIDO: el dashboard y la API de nucleo (mas abajo) piden
+    # usuario y contrasena. Las credenciales son las mismas que las de
+    # api.geoservices.space y viven en /etc/nginx/geospace.htpasswd, fuera del
+    # repo. Hasta el 2026-10-13 ambos eran publicos.
+    auth_basic           "Geospace";
+    auth_basic_user_file /etc/nginx/geospace.htpasswd;
+
     # La API de nucleo se sirve desde ESTE MISMO origen.
     #
     # Antes el dashboard le hablaba a https://api.geoservices.space desde el
