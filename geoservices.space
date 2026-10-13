@@ -1,5 +1,7 @@
 # nx-routes: geoservices.space -> svelte_geo (SvelteKit + adapter-node, pm2, 127.0.0.1:3900)
 #                                 /track/ -> geospace-track (FastAPI + SQLite, pm2, 127.0.0.1:8003)
+#                                            SOLO POST /track/api/map-interactions y GET /track/health;
+#                                            el resto de /track/ es 404 a proposito (la API no tiene auth)
 #
 # OJO: el bloque 443 de abajo es el UNICO `default_server` de todo nx-routes.
 # Si se pierde esa palabra al editar, cambia el comportamiento HTTPS del droplet
@@ -21,19 +23,45 @@ server {
         return 301 https://geoservices.space$request_uri;
     }
 
-    # API de tracking (geospace-track).
+    # API de tracking (geospace-track) — SOLO ESCRITURA PUBLICA.
     #
-    # Va antes que `location /` por claridad; nginx elegiria igual el prefijo
-    # mas largo. La diagonal final de proxy_pass NO es opcional: hace que
-    # /track/api/map-interactions llegue al backend como /api/map-interactions.
-    location /track/ {
-        proxy_pass http://127.0.0.1:8003/;
+    # El navegador necesita exactamente una cosa: POST /track/api/map-interactions.
+    # Antes este bloque proxeaba TODA la API (location /track/ con proxy_pass a
+    # la raiz), y la API no tiene autenticacion: cualquiera podia bajar la tabla
+    # entera con un GET anonimo — ids de cliente de GA, coordenadas de IP y de
+    # GPS reales, gclid/fbclid y, cuando se usa el modo telefono, los numeros
+    # buscados. Tambien quedaban publicos /docs y /openapi.json.
+    #
+    # Los lectores legitimos (geospace_nucleo, que corre en este mismo droplet)
+    # leen directo de http://127.0.0.1:8003 y no pasan por nginx. No apuntarlos
+    # a https://geoservices.space/track.
+    #
+    # Se listan las rutas EXACTAS (location =) y todo lo demas bajo /track/ da
+    # 404: asi una ruta nueva que se agregue a la API nace privada, en vez de
+    # nacer publica por herencia.
+    location = /track/api/map-interactions {
+        limit_except POST {
+            deny all;
+        }
+        proxy_pass http://127.0.0.1:8003/api/map-interactions;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
+    }
+
+    # Health check: lo usan el watcher de ntfy y el paso de verificacion del
+    # deploy de svelte_geo. No expone datos.
+    location = /track/health {
+        proxy_pass http://127.0.0.1:8003/health;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+
+    location /track/ {
+        return 404;
     }
 
     # La app.
