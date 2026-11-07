@@ -1,0 +1,39 @@
+# nx-routes: ruta de app-index.moibe.me → app SvelteKit en 127.0.0.1:4600 (pm2).
+# El nombre de ESTE archivo debe ser EXACTAMENTE el dominio: app-index.moibe.me
+#
+# Las líneas "# managed by Certbot" las gestiona certbot al correr en el droplet:
+#     sudo certbot --nginx -d app-index.moibe.me
+# Si nginx se queja de que el cert aún no existe (primer deploy del dominio):
+#   1) obtén el cert primero:  sudo certbot certonly --nginx -d app-index.moibe.me
+#   2) crea el symlink + reload (ver checklist de la skill).
+# (Para un dominio apex con www, agrega "www.app-index.moibe.me" a server_name + su redirect.)
+
+server {
+    server_name app-index.moibe.me;
+
+    location / {
+        proxy_pass http://127.0.0.1:4600;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app-index.moibe.me/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app-index.moibe.me/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 12M;
+}
+
+server {
+    if ($host = app-index.moibe.me) { return 301 https://$host$request_uri; } # managed by Certbot
+    listen 80;
+    server_name app-index.moibe.me;
+    return 404; # managed by Certbot
+}
