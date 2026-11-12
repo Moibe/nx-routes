@@ -1,0 +1,204 @@
+server {
+    server_name app.vibradual.com;
+
+    location / {  
+        proxy_pass http://127.0.0.1:7878/; 
+        proxy_buffering off;
+        proxy_redirect off;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_intercept_errors on;
+    }
+
+error_page 404 /404.html;
+
+location = /404.html {
+    root /var/www/splashmix-login; # O donde sea que esté tu 404.html
+    internal; # Esto es clave: evita el acceso directo
+}
+
+location = /buy {
+    root /var/www/splashmix-buy;
+    try_files /index.html =404;
+}
+
+   location = /login {
+    root /var/www/splashmix-login;
+    try_files /login.html =404;
+}
+
+location = /logout {
+        # Realiza una redirección EXTERNA (302 Found) al navegador
+        # El navegador entonces solicita /login?logout=true
+        return 302 /login?logout=true;
+    }
+
+location = /main.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /table_generator.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /firestore_db.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /visit_tracker.js {
+    root /var/www/splashmix-buy-dev;
+}
+
+location = /country_selector.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /index.css {
+    root /var/www/splashmix-login;
+}
+
+location = /environment.js {
+    root /var/www/splashmix-login;
+}
+
+location = /auth_login.js {
+    root /var/www/splashmix-login;
+}
+
+location = /loader_login.js {
+    root /var/www/splashmix-login;
+}
+
+location = /loader_buy.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /config_dev.js {
+    root /var/www/splashmix-login;
+}
+
+location = /config_prod.js {
+    root /var/www/splashmix-login;
+}
+
+location = /buy_config_dev.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /buy_config_prod.js {
+    root /var/www/splashmix-buy;
+}
+
+
+location = /link.js {
+    root /var/www/splashmix-login;
+}
+
+location = /ambiente.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /tabulador.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /cards.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /api.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /precios.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /tablas_precio.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /auth_buy.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /style.css {
+    root /var/www/splashmix-buy;
+}
+
+location = /config.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /faqs.html {
+    root /var/www/splashmix-buy;
+}
+
+location = /policy.html {
+    root /var/www/splashmix-buy;
+}
+
+location = /contacto.html {
+    root /var/www/splashmix-buy;
+}
+
+location = /link_manager.js {
+    root /var/www/splashmix-buy;
+}
+
+location = /gtm-loader.js {
+    root /var/www/splashmix-buy;
+}
+
+location /imagenes/ {
+    root /var/www/splashmix-buy;
+    try_files $uri $uri/ =404;
+}
+
+location /precios {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_buffering off;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+
+location /textos {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_buffering off;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+    
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/vibradual.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/vibradual.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+    client_max_body_size 10M;
+}
+
+server {   
+
+    if ($host = app.vibradual.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+    
+    server_name app.vibradual.com;
+    listen 80;
+    return 404; # managed by Certbot
+
+}
